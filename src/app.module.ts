@@ -1,12 +1,20 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { UsersModule } from './models/users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from './models/auth/auth.module';
+import { AuthMiddleware } from './middlewares/auth.middleware';
+import { UsersContollers } from './models/users/users.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (ConfigService: ConfigService) => {
@@ -22,4 +30,14 @@ import { AuthModule } from './models/auth/auth.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude(
+        { path: '/user/sign-up', method: RequestMethod.POST },
+        { path: '/user/sign-in', method: RequestMethod.POST },
+      )
+      .forRoutes(UsersContollers);
+  }
+}

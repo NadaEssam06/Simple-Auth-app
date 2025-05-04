@@ -6,6 +6,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('User example')
     .setVersion('1.0')
+    .addBearerAuth()
     .addTag('Nest')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
