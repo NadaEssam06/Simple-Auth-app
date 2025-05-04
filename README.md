@@ -61,15 +61,6 @@ src/
 ├── main.ts
 ├── app.module.ts
 ```
-🧪 API Routes
-Method	Endpoint	Description	Auth Required
-POST	/users/sign-up	Register new user	❌
-POST	/users/sign-in 	Login user	❌
-GET	/users/my-profile	Get logged-in user profile	✅
-GET	/users/all	Get all other users	✅
-
-
-And load config using @nestjs/config.
 🧾 Swagger
 
 Access Swagger UI at:
